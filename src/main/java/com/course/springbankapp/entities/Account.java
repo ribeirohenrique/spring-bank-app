@@ -2,6 +2,7 @@ package com.course.springbankapp.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +15,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode
 @Table(name = "tb_account")
 public class Account implements Serializable {
 
@@ -27,18 +29,19 @@ public class Account implements Serializable {
     private double accountBalance;
     private double accountLimit;
     private String accountType;
-
     @JsonIgnore
-    @OneToMany(mappedBy = "accountNumber")
+    @OneToMany(mappedBy = "account")
     private List<Transaction> transactionHistory;
 
-    public Account(int accountNumber, String clientName, double accountLimit, String accountType) {
+    public Account(Long id, int accountNumber, int agencyNumber, String clientName, String clientPhone, String accountType) {
+        this.id = id;
         this.accountNumber = accountNumber;
-        this.agencyNumber = 1;
+        this.agencyNumber = agencyNumber;
         this.clientName = clientName;
-        this.accountLimit = accountLimit;
+        this.clientPhone = clientPhone;
+        this.accountBalance = 0.0;
+        this.accountLimit = 0.0;
         this.accountType = accountType;
-        this.accountBalance = 0;
         this.transactionHistory = new ArrayList<>();
     }
 
