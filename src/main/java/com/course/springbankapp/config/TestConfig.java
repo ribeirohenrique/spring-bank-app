@@ -27,12 +27,12 @@ public class TestConfig implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        Account acc1 = new Account(null,15161718,842,"Fernando Rocha","199825340796","CC");
-        Account acc2 = new Account(null,19202122,635,"Rafaela Pereira Dourados","119846392101","CP");
-        accountRepository.saveAll(Arrays.asList(acc1,acc2));
+        Account acc1 = new Account(null, 15161718, 842, "Fernando Rocha", "199825340796", "CC");
+        Account acc2 = new Account(null, 19202122, 635, "Rafaela Pereira Dourados", "119846392101", "CP");
+        accountRepository.saveAll(Arrays.asList(acc1, acc2));
 
-        Transaction tra1 = new Transaction(null, new Date(), "Saque efetuado com sucesso",acc1);
-        Transaction tra2 = new Transaction(null, new Date(), "Transferência efetuado com sucesso",acc2);
+        Transaction tra1 = new Transaction(null, new Date(), "Saque efetuado com sucesso", acc1);
+        Transaction tra2 = new Transaction(null, new Date(), "Transferência efetuado com sucesso", acc2);
         transactionRepository.saveAll(Arrays.asList(tra1, tra2));
 
         acc1.setTransactionHistory(List.of(tra1));

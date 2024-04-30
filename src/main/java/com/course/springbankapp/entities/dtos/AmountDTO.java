@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BalanceDTO {
-    private Double balance;
+public class AmountDTO {
+    private Double amount;
 }

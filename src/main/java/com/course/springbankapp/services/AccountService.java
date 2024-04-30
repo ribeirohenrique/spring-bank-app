@@ -2,6 +2,8 @@ package com.course.springbankapp.services;
 
 import com.course.springbankapp.entities.Account;
 import com.course.springbankapp.repositories.AccountRepository;
+import com.course.springbankapp.services.exceptions.AccountBalanceException;
+import com.course.springbankapp.services.exceptions.AccountLimitException;
 import com.course.springbankapp.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,45 @@ public class AccountService {
         try {
             Account entity = accountRepository.getReferenceById(id);
             updateData(entity, account);
+            return accountRepository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    //Efetuar depósito por id
+    public Account deposit(Long id, Double amount) {
+        try {
+            Account entity = accountRepository.getReferenceById(id);
+            entity.setAccountBalance(entity.getAccountBalance() + amount);
+            return accountRepository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    public Account withdraw(Long id, Double amount) {
+        try {
+            Account entity = accountRepository.getReferenceById(id);
+            if (entity.getAccountBalance() < amount) {
+                throw new AccountBalanceException(id);
+            }
+            if (entity.getAccountLimit() < amount) {
+                throw new AccountLimitException(id);
+            }
+            entity.setAccountBalance(entity.getAccountBalance() - amount);
+            return accountRepository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
+
+    }
+
+    //Efetuar depósito por id
+    public Account changeAccountLimit(Long id, Double amount) {
+        try {
+            Account entity = accountRepository.getReferenceById(id);
+            entity.setAccountLimit(entity.getAccountLimit() + amount);
             return accountRepository.save(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
