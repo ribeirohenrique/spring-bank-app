@@ -2,6 +2,7 @@ package com.course.springbankapp.services;
 
 import com.course.springbankapp.entities.Account;
 import com.course.springbankapp.repositories.AccountRepository;
+import com.course.springbankapp.resources.exceptions.BankingExceptions;
 import com.course.springbankapp.services.exceptions.AccountBalanceException;
 import com.course.springbankapp.services.exceptions.AccountLimitException;
 import com.course.springbankapp.services.exceptions.ResourceNotFoundException;
@@ -9,6 +10,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -82,6 +84,35 @@ public class AccountService {
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
+    }
+
+    public Account transferBetweenAccounts(Long accountNumberSender, Long accountNumberReceiver, Double amount) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        Account accountSender = accountRepository.getReferenceById(accountNumberSender);
+        Account accountReceiver = accountRepository.getReferenceById(accountNumberReceiver);
+        try {
+            // Verifique se o horário atual está entre 21h e 6h
+            if (currentTime.getHour() >= 21 || currentTime.getHour() < 6) {
+                throw new BankingExceptions("Transferências não são permitidas entre as 21h e 6h.");
+            }
+            if (accountSender.getAccountBalance() < amount) {
+                throw new AccountBalanceException("Erro: O valor a ser transferido é maior que o saldo atual.");
+            }
+            if (accountSender.getAccountLimit() < amount) {
+                throw new AccountLimitException("Erro: O valor a ser transferido é maior que o limite atual.");
+            }
+            //primeiro subtrai do Sender
+            accountSender.setAccountBalance(accountSender.getAccountBalance() - amount);
+            //depois deposita no Receiver
+            accountReceiver.setAccountBalance(accountReceiver.getAccountBalance() + amount);
+            accountRepository.save(accountSender);
+
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(accountNumberReceiver);
+        } catch (BankingExceptions e) {
+            System.out.println(e.getMessage());
+        }
+        return accountRepository.save(accountSender);
     }
 
     //Método auxiliar para atualizar apenas o nome e telefone

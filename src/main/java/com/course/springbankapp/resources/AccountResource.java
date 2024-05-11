@@ -5,6 +5,7 @@ import com.course.springbankapp.entities.Account;
 import com.course.springbankapp.entities.dtos.AccountDTO;
 import com.course.springbankapp.entities.dtos.AmountDTO;
 import com.course.springbankapp.entities.dtos.BalanceDTO;
+import com.course.springbankapp.entities.dtos.TransferDTO;
 import com.course.springbankapp.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -67,6 +68,13 @@ public class AccountResource {
     @PutMapping(value = "/{id}")
     public ResponseEntity<AccountDTO> update(@PathVariable Long id, @RequestBody Account account) {
         account = accountService.update(id, account);
+        return ResponseEntity.ok().body(new AccountDTO(account));
+    }
+
+    //Atualizar conta existente
+    @PutMapping(value = "/{id}/transfer")
+    public ResponseEntity<AccountDTO> transferBetweenAccounts(@PathVariable Long id,@RequestBody TransferDTO transferDTO) {
+        Account account = accountService.transferBetweenAccounts(id, transferDTO.getId(),transferDTO.getAmount());
         return ResponseEntity.ok().body(new AccountDTO(account));
     }
 }
