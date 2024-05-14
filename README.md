@@ -31,6 +31,7 @@ Faça uma aplicação bancária que permita transferências de valores. O sistem
 - Agora o dado é persistente sendo configurado com o banco de dados MariaDB através do serviço [Filess](https://dash.filess.io/);
 - O projeto foi atualizado para ser executado dentro de um container Docker e hospedado através do [Render](https://render.com) no endereço [spring-bank-app](https://spring-bank-app.onrender.com);
 - O Swagger da aplicação está disponível em [spring-bank-app-swagger](https://spring-bank-app.onrender.com/swagger-ui/index.html);
+- Para facilitar o teste, existe uma pasta com a collection do Postman utilizada [Collection](/src/postman_collection/spring-bank-app.postman_collection.json)
 - O saldo de toda conta nova, inicia em zero, sendo necessário efetuar um depósito inicial e aumento de limite para realizar transações, visto que existem regras que validam o saldo e limite;
 - O projeto foi desenvolvido com algumas regras seguindo modelos de bancos existentes, analisando comportamento de uso cotidiano como, por exemplo:
 1. Não permitir a criação de contas com o mesmo número;
