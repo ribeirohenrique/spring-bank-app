@@ -1,7 +1,9 @@
 package com.course.springbankapp.services;
 
 import com.course.springbankapp.entities.Account;
+import com.course.springbankapp.entities.Transaction;
 import com.course.springbankapp.repositories.AccountRepository;
+import com.course.springbankapp.repositories.TransactionRepository;
 import com.course.springbankapp.resources.exceptions.BankingExceptions;
 import com.course.springbankapp.services.exceptions.AccountBalanceException;
 import com.course.springbankapp.services.exceptions.AccountLimitException;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -18,6 +21,9 @@ public class AccountService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     //Encontrar conta por Id
     public Account findById(Long id) {
@@ -28,12 +34,15 @@ public class AccountService {
     //Consultar saldo por Id
     public Double balance(Long id) {
         Account account = accountRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
+        transactionRepository.save(new Transaction(null, new Date(), "Consulta de saldo realizada.", account));
         return account.getAccountBalance();
     }
 
     //Criar nova conta
     public Account insert(Account account) {
-        return accountRepository.save(account);
+        accountRepository.save(account);
+        transactionRepository.save(new Transaction(null, new Date(), "Conta criada.", account));
+        return account;
     }
 
     //Atualizar conta existente
@@ -41,7 +50,9 @@ public class AccountService {
         try {
             Account entity = accountRepository.getReferenceById(id);
             updateData(entity, account);
-            return accountRepository.save(entity);
+            accountRepository.save(entity);
+            transactionRepository.save(new Transaction(null, new Date(), "Dados bancários atualizados.", entity));
+            return entity;
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
@@ -52,12 +63,15 @@ public class AccountService {
         try {
             Account entity = accountRepository.getReferenceById(id);
             entity.setAccountBalance(entity.getAccountBalance() + amount);
-            return accountRepository.save(entity);
+            accountRepository.save(entity);
+            transactionRepository.save(new Transaction(null, new Date(), "Depósito bancário efetuado.", entity));
+            return entity;
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
 
+    //Efetuar saque por id
     public Account withdraw(Long id, Double amount) {
         try {
             Account entity = accountRepository.getReferenceById(id);
@@ -68,24 +82,29 @@ public class AccountService {
                 throw new AccountLimitException(id);
             }
             entity.setAccountBalance(entity.getAccountBalance() - amount);
-            return accountRepository.save(entity);
+            accountRepository.save(entity);
+            transactionRepository.save(new Transaction(null, new Date(), "Saque bancário efetuado.", entity));
+            return entity;
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
 
     }
 
-    //Efetuar depósito por id
+    //Efetuar mudança de limite de saque por id
     public Account changeAccountLimit(Long id, Double amount) {
         try {
             Account entity = accountRepository.getReferenceById(id);
             entity.setAccountLimit(entity.getAccountLimit() + amount);
-            return accountRepository.save(entity);
+            accountRepository.save(entity);
+            transactionRepository.save(new Transaction(null, new Date(), "Limite de saque bancário alterado.", entity));
+            return entity;
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(id);
         }
     }
 
+    //Efetuar transferência entre contas
     public Account transferBetweenAccounts(Long accountNumberSender, Long accountNumberReceiver, Double amount) {
         LocalDateTime currentTime = LocalDateTime.now();
         Account accountSender = accountRepository.getReferenceById(accountNumberSender);
@@ -103,16 +122,19 @@ public class AccountService {
             }
             //primeiro subtrai do Sender
             accountSender.setAccountBalance(accountSender.getAccountBalance() - amount);
+            accountRepository.save(accountSender);
+
             //depois deposita no Receiver
             accountReceiver.setAccountBalance(accountReceiver.getAccountBalance() + amount);
-            accountRepository.save(accountSender);
+            accountRepository.save(accountReceiver);
 
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFoundException(accountNumberReceiver);
         } catch (BankingExceptions e) {
             System.out.println(e.getMessage());
         }
-        return accountRepository.save(accountSender);
+        transactionRepository.save(new Transaction(null, new Date(), ("Transferência de " + accountSender.getAccountNumber() + " para " + accountReceiver.getAccountNumber() + " efetuada com sucesso."), accountSender));
+        return accountSender;
     }
 
     //Método auxiliar para atualizar apenas o nome e telefone

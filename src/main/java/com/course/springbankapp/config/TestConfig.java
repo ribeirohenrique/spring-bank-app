@@ -31,9 +31,10 @@ public class TestConfig implements CommandLineRunner {
         Account acc2 = new Account(null, 19202122, 635, "Rafaela Pereira Dourados", "119846392101", "CP");
         accountRepository.saveAll(Arrays.asList(acc1, acc2));
 
-        Transaction tra1 = new Transaction(null, new Date(), "Saque efetuado com sucesso", acc1);
-        Transaction tra2 = new Transaction(null, new Date(), "Transferência efetuado com sucesso", acc2);
-        transactionRepository.saveAll(Arrays.asList(tra1, tra2));
+        Transaction tra1 = new Transaction(null, new Date(), "Conta criada.", acc1);
+        Transaction tra2 = new Transaction(null, new Date(), "Conta criada.", acc2);
+        Transaction tra3 = new Transaction(null, new Date(), "Dados bancários atualizados.", acc2);
+        transactionRepository.saveAll(Arrays.asList(tra1, tra2, tra3));
 
         acc1.setTransactionHistory(List.of(tra1));
         acc2.setTransactionHistory(List.of(tra2));

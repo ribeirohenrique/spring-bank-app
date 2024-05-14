@@ -2,37 +2,46 @@ package com.course.springbankapp.resources;
 
 
 import com.course.springbankapp.entities.Account;
-import com.course.springbankapp.entities.dtos.AccountDTO;
-import com.course.springbankapp.entities.dtos.AmountDTO;
-import com.course.springbankapp.entities.dtos.BalanceDTO;
-import com.course.springbankapp.entities.dtos.TransferDTO;
+import com.course.springbankapp.entities.dtos.*;
 import com.course.springbankapp.services.AccountService;
+import com.course.springbankapp.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping(value = "/accounts")
+@RequestMapping(value = "/accounts", produces = "application/json", consumes = "application/json")
 public class AccountResource {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private TransactionService transactionService;
 
     //Encontrar conta por Id
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AccountDTO> findbyId(@PathVariable Long id) {
+    public ResponseEntity<AccountDTO> findById(@PathVariable Long id) {
         Account account = accountService.findById(id);
         return ResponseEntity.ok().body(new AccountDTO(account));
     }
+
 
     //Consultar saldo por Id
     @GetMapping(value = "/{id}/balance")
     public ResponseEntity<BalanceDTO> balance(@PathVariable Long id) {
         Double balance = accountService.balance(id);
         return ResponseEntity.ok().body(new BalanceDTO(balance));
+    }
+
+    //Consultar histórico da conta por Id
+    @GetMapping(value = "/{id}/history")
+    public ResponseEntity<List<TransactionDTO>> history(@PathVariable Long id) {
+        List<TransactionDTO> transactionDTOList = transactionService.history(id);
+        return ResponseEntity.ok().body(transactionDTOList);
     }
 
     //Criar nova conta
@@ -73,8 +82,8 @@ public class AccountResource {
 
     //Atualizar conta existente
     @PutMapping(value = "/{id}/transfer")
-    public ResponseEntity<AccountDTO> transferBetweenAccounts(@PathVariable Long id,@RequestBody TransferDTO transferDTO) {
-        Account account = accountService.transferBetweenAccounts(id, transferDTO.getId(),transferDTO.getAmount());
+    public ResponseEntity<AccountDTO> transferBetweenAccounts(@PathVariable Long id, @RequestBody TransferDTO transferDTO) {
+        Account account = accountService.transferBetweenAccounts(id, transferDTO.getId(), transferDTO.getAmount());
         return ResponseEntity.ok().body(new AccountDTO(account));
     }
 }

@@ -22,9 +22,15 @@ public class Account implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private int accountNumber;
     private int agencyNumber;
+
+    @Column(unique = true)
     private String clientName;
+
+    @Column(unique = true)
     private String clientPhone;
     private double accountBalance;
     private double accountLimit;
