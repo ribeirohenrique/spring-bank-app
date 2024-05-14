@@ -26,7 +26,7 @@ public class TransactionService {
         File transactionHistory = new File(fileName);
         try {
             if (transactionHistory.exists()) {
-                if (transactionHistory.delete()) {
+                if (!transactionHistory.delete()) {
                     throw new BankingExceptions("Erro ao deletar o histórico de transações");
                 }
             }

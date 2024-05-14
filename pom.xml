@@ -14,7 +14,7 @@
     <name>spring-bank-app</name>
     <description>spring-bank-app</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
     </properties>
     <dependencies>
         <dependency>
