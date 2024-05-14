@@ -1,19 +1,16 @@
-FROM maven:3.8.4-jdk-17-alpine AS build
+FROM ubuntu:latest AS build
 
-RUN apk update && \
-    apk add --no-cache openjdk17 && \
-    mkdir /app
-
-WORKDIR /app
-
+RUN apt update
+RUN apt install openjdk-17-jdk -y
 COPY . .
 
+RUN apt install maven -y
 RUN mvn clean install -DskipTests
 
-FROM openjdk:17-jdk-alpine3.15
+FROM openjdk:17-jdk-slim
 
 EXPOSE 8080
 
-COPY --from=build /app/target/spring-bank-app-0.0.1-SNAPSHOT.jar /app.jar
+COPY --from=build /target/spring-bank-app-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
