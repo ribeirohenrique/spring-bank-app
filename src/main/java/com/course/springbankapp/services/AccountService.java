@@ -5,13 +5,13 @@ import com.course.springbankapp.entities.Transaction;
 import com.course.springbankapp.repositories.AccountRepository;
 import com.course.springbankapp.repositories.TransactionRepository;
 import com.course.springbankapp.resources.exceptions.BankingExceptions;
-import com.course.springbankapp.services.exceptions.AccountBalanceException;
-import com.course.springbankapp.services.exceptions.AccountLimitException;
-import com.course.springbankapp.services.exceptions.ResourceNotFoundException;
+import com.course.springbankapp.services.exceptions.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
@@ -40,9 +40,14 @@ public class AccountService {
 
     //Criar nova conta
     public Account insert(Account account) {
-        accountRepository.save(account);
-        transactionRepository.save(new Transaction(null, new Date(), "Conta criada.", account));
-        return account;
+        try {
+            accountRepository.save(account);
+            transactionRepository.save(new Transaction(null, new Date(), "Conta criada.", account));
+            return account;
+        } catch (DataIntegrityViolationException e) {
+            throw new AccountDuplicateException(account.getAccountNumber());
+        }
+
     }
 
     //Atualizar conta existente

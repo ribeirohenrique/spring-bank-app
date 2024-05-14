@@ -66,7 +66,7 @@ public class AccountResource {
         return ResponseEntity.ok().body(new AccountDTO(account));
     }
 
-    //Atualizar conta existente
+    //Efetuar saque
     @PutMapping(value = "/{id}/withdraw")
     public ResponseEntity<AccountDTO> withdraw(@PathVariable Long id, @RequestBody AmountDTO amount) {
         Account account = accountService.withdraw(id, amount.getAmount());
@@ -80,7 +80,7 @@ public class AccountResource {
         return ResponseEntity.ok().body(new AccountDTO(account));
     }
 
-    //Atualizar conta existente
+    //Efetuar transferência entre contas
     @PutMapping(value = "/{id}/transfer")
     public ResponseEntity<AccountDTO> transferBetweenAccounts(@PathVariable Long id, @RequestBody TransferDTO transferDTO) {
         Account account = accountService.transferBetweenAccounts(id, transferDTO.getId(), transferDTO.getAmount());

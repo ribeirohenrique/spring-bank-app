@@ -1,0 +1,351 @@
+{
+	"info": {
+		"_postman_id": "810a8869-6f0b-4545-b6e4-7e13162f34fb",
+		"name": "spring-bank-app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20999803"
+	},
+	"item": [
+		{
+			"name": "create account",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"accountNumber\": 41424241,\r\n    \"agencyNumber\": 247,\r\n    \"clientName\": \"Camila Quintana Pereira\",\r\n    \"clientPhone\": \"21983457713\",\r\n    \"accountType\": \"CC\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update account by id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"clientName\": \"Camila Quintana de Almeida\",\r\n    \"clientPhone\": \"21983457745\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "change account limit by id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 500.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId/changeAccountLimit",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId",
+						"changeAccountLimit"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deposit by id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 1000.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId/deposit",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId",
+						"deposit"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "withdraw by id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"amount\": 100.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId/withdraw",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId",
+						"withdraw"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "transfer between accounts by id",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": 1,\r\n    \"amount\": 290.0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId/transfer",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId",
+						"transfer"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "find account by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get transaction history",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId/history",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId",
+						"history"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get balance by id",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "https://spring-bank-app.onrender.com/accounts/:accountId/balance",
+					"protocol": "https",
+					"host": [
+						"spring-bank-app",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"accounts",
+						":accountId",
+						"balance"
+					],
+					"variable": [
+						{
+							"key": "accountId",
+							"value": "4"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
